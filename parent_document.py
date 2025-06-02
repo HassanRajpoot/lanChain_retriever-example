@@ -30,17 +30,13 @@ child_splitter = RecursiveCharacterTextSplitter(chunk_size=400)
 db_setup = PineconeSetup().create_index()
 
 vectordb = PineconeVectorStore.from_documents(
-    documents=splits,
     embedding=embedding,
     index_name=os.getenv("PINECONE_INDEX_NAME"),
-)
-vectorstore = Chroma(
-    collection_name="full_documents", embedding_function=OpenAIEmbeddings()
 )
 # The storage layer for the parent documents
 store = InMemoryStore()
 retriever = ParentDocumentRetriever(
-    vectorstore=vectorstore,
+    vectorstore=vectordb,
     docstore=store,
     child_splitter=child_splitter,
 )
