@@ -1,12 +1,19 @@
+import os
 from langchain.storage import InMemoryByteStore
 from langchain_community.vectorstores import Chroma
 from langchain_community.document_loaders import TextLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+
+gpt_key = os.getenv("GPT_API_KEY")
+gpt_model = os.getenv("OPENAI_MODEL")
+embedding_model = os.getenv("EMBEDDING_MODEL")
+
+
 loaders = [
-    TextLoader("paul_graham_essay.txt"),
-    TextLoader("state_of_the_union.txt"),
+    TextLoader("paul_graham_essay.txt", encoding="utf-8"),
+    TextLoader("state_of_the_union.txt", encoding="utf-8"),
 ]
 docs = []
 for loader in loaders:
@@ -16,7 +23,7 @@ docs = text_splitter.split_documents(docs)
 
 # The vectorstore to use to index the child chunks
 vectorstore = Chroma(
-    collection_name="full_documents", embedding_function=OpenAIEmbeddings()
+    collection_name="full_documents", embedding_function=OpenAIEmbeddings(api_key=gpt_key, model=embedding_model)
 )
 
 
