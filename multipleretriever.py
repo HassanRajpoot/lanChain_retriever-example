@@ -35,7 +35,7 @@ class LineListOutputParser(BaseOutputParser[List[str]]):
 
     def parse(self, text: str) -> List[str]:
         lines = text.strip().split("\n")
-        return list(filter(None, lines))  # Remove empty lines
+        return list(filter(None, lines))
 
 
 output_parser = LineListOutputParser()
